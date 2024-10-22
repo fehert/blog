@@ -85,6 +85,42 @@ namespace blog.Controllers
             return NotFound();
         }
 
+        [HttpPut("{id}")]
+        public ActionResult Put(Guid id,string Title,string Description,DateTime CretedTime,DateTime LastUpdated)
+        {
+            con.Connection.Open();
+            string sql = "UPDATE felhasznalo SET Id = @Id,Title=@Title,Description=@Description,CretedTime=@CretedTime,LastUpdated=@LastUpdated WHERE Id = @Id";
+            MySqlCommand cmd = new MySqlCommand(sql, con.Connection);
+            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.Parameters.AddWithValue("@Title", Title);
+            cmd.Parameters.AddWithValue("@Description", Description);
+            cmd.Parameters.AddWithValue("@CretedTime", CretedTime);
+            cmd.Parameters.AddWithValue("@LastUpdated", LastUpdated);
+            int rowsAffected = cmd.ExecuteNonQuery();
+            con.Connection.Close();
+
+            if (rowsAffected == 0)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(Guid id)
+        {
+            con.Connection.Open();
+            string sql = "DELETE FROM felhasznalo WHERE Id = @Id";
+            MySqlCommand cmd = new MySqlCommand(sql, con.Connection);
+            cmd.Parameters.AddWithValue("@Id", id);
+            int rowsAffected = cmd.ExecuteNonQuery();
+            con.Connection.Close();
+
+            if (rowsAffected == 0)
+                return NotFound();
+
+            return NoContent();
+        }
+
 
     }
 
